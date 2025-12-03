@@ -9,9 +9,7 @@ import './Navbar.css'
  * Shows icons + labels on desktop, collapses on mobile.
  */
 
-export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
-
+export default function Navbar({ activeTab, onTabChange, onAccountClick }) {
   const navItems = [
     { label: 'Home', icon: FiHome, id: 'home' },
     { label: 'Settings', icon: FiSettings, id: 'settings' },

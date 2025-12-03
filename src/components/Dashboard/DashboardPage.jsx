@@ -20,6 +20,14 @@
 import React from 'react'
 import Dashboard from './Dashboard'
 
+import { Routes, Route } from 'react-router-dom'
+import AccountSection from '../Account/AccountSection'
+
 export default function DashboardPage() {
-  return <Dashboard />
+  return (
+    <Routes>
+      <Route path="/" element={<Dashboard />} />
+      <Route path="account" element={<AccountSection />} />
+    </Routes>
+  )
 }

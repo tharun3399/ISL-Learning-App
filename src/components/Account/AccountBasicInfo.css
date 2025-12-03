@@ -1,0 +1,192 @@
+/* AccountBasicInfo.css - Basic User Information Card */
+
+.account-card {
+  display: flex;
+  flex-direction: row;
+  background: rgba(15, 20, 40, 0.92);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0, 217, 255, 0.10), 0 1.5px 8px rgba(0,0,0,0.08);
+  padding: 32px 24px;
+  max-width: 640px;
+  margin: 32px auto;
+  gap: 32px;
+  position: relative;
+  color: #fff;
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+}
+
+.account-card__avatar-col {
+  flex: 0 0 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.account-card__avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00d9ff 0%, #1a1f3a 100%);
+  box-shadow: 0 4px 16px rgba(0,217,255,0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: box-shadow 0.2s;
+  outline: none;
+}
+.account-card__avatar:focus-visible,
+.account-card__avatar:hover {
+  box-shadow: 0 0 0 3px #00ff7f, 0 4px 16px rgba(0,217,255,0.18);
+}
+
+.account-card__avatar-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+.account-card__photo-btn {
+  position: absolute;
+  bottom: -36px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #00ff7f;
+  color: #1a1f3a;
+  border: none;
+  border-radius: 16px;
+  padding: 6px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,217,255,0.10);
+  transition: background 0.2s, color 0.2s;
+  outline: none;
+}
+.account-card__photo-btn:hover,
+.account-card__photo-btn:focus-visible {
+  background: #00d9ff;
+  color: #fff;
+}
+
+.account-card__info-col {
+  flex: 1 1 70%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.account-card__row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.account-card__label {
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: #00ff7f;
+  letter-spacing: 0.01em;
+}
+
+.account-card__input {
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #00d9ff;
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  outline: none;
+  margin-bottom: 2px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.account-card__input:focus-visible {
+  border-color: #00ff7f;
+  box-shadow: 0 0 0 2px #00ff7f;
+}
+
+.account-card__value {
+  font-size: 16px;
+  color: #fff;
+  padding: 8px 0;
+}
+
+.account-card__muted {
+  color: #b0b8c1;
+  font-style: italic;
+}
+
+.account-card__error {
+  color: #ff006e;
+  font-size: 13px;
+  margin-top: 2px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.account-card__actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.account-card__btn {
+  padding: 8px 20px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #00d9ff;
+  color: #1a1f3a;
+  box-shadow: 0 2px 8px rgba(0,217,255,0.10);
+  transition: background 0.2s, color 0.2s;
+  outline: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.account-card__btn:hover,
+.account-card__btn:focus-visible {
+  background: #00ff7f;
+  color: #1a1f3a;
+}
+.account-card__btn--edit {
+  background: #1a1f3a;
+  color: #00d9ff;
+  border: 1px solid #00d9ff;
+}
+.account-card__btn--edit:hover,
+.account-card__btn--edit:focus-visible {
+  background: #00d9ff;
+  color: #1a1f3a;
+}
+.account-card__btn--save {
+  background: #00ff7f;
+  color: #1a1f3a;
+}
+.account-card__btn--cancel {
+  background: #ff006e;
+  color: #fff;
+}
+
+@media (max-width: 700px) {
+  .account-card {
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 8px;
+    gap: 18px;
+    max-width: 98vw;
+  }
+  .account-card__avatar-col {
+    margin-bottom: 18px;
+  }
+  .account-card__info-col {
+    width: 100%;
+    min-width: 0;
+  }
+}

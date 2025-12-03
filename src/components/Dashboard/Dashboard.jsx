@@ -29,27 +29,25 @@ const mockLessons = [
 
 export default function Dashboard() {
   const [lessons, setLessons] = useState(mockLessons)
-  const [selectedLessonId, setSelectedLessonId] = useState(1)
+  const [selectedLessonId, setSelectedLessonId] = useState(null)
+  const navigate = useNavigate()
+
+  const handleToggleLesson = id => {
+    setLessons(prev => prev.map(l => l.id === id ? { ...l, completed: !l.completed } : l))
+  }
+
+  const handleSelectLesson = id => setSelectedLessonId(id)
+
+  const handleAccountClick = () => {
+    navigate('account')
+  }
 
   const completedCount = lessons.filter(l => l.completed).length
   const completionPercent = Math.round((completedCount / lessons.length) * 100)
 
-  const handleToggleLesson = (id) => {
-    setLessons(prev => 
-      prev.map(lesson => 
-        lesson.id === id ? { ...lesson, completed: !lesson.completed } : lesson
-      )
-    )
-  }
-
-  const handleSelectLesson = (id) => {
-    setSelectedLessonId(id)
-  }
-
   return (
     <div className="dashboard-container">
-      <Navbar />
-      
+      <Navbar onAccountClick={handleAccountClick} />
       <main className="dashboard-main">
         <LessonList
           lessons={lessons}
@@ -57,14 +55,11 @@ export default function Dashboard() {
           onSelect={handleSelectLesson}
           onToggleComplete={handleToggleLesson}
         />
-        
-        <aside className="dashboard-aside">
-          <ProgressCard
-            completionPercent={completionPercent}
-            completedLessons={completedCount}
-            totalLessons={lessons.length}
-          />
-        </aside>
+        <ProgressCard
+          completionPercent={completionPercent}
+          completedLessons={completedCount}
+          totalLessons={lessons.length}
+        />
       </main>
     </div>
   )

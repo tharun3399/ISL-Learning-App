@@ -4,6 +4,7 @@ import LoginPage from './components/Login/LoginPage'
 import RegisterPage from './components/Register/RegisterPage'
 import VideoPage from './components/Video/VideoPage'
 import DashboardPage from './components/Dashboard/DashboardPage'
+import AccountSection from './components/Account/AccountSection'
 
 export default function App() {
   return (
@@ -12,7 +13,7 @@ export default function App() {
         <Route path="/" element={<VideoPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/dashboard/*" element={<DashboardPage />} />
       </Routes>
     </BrowserRouter>
   )

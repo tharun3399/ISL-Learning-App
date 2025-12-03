@@ -7,6 +7,7 @@ export default function RegisterPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     password: '',
     confirmPassword: ''
   })
@@ -53,6 +54,20 @@ export default function RegisterPage() {
               onChange={handleChange}
               required
               className="form-input"
+            />
+          </div>
+
+          <div className="form-group">
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Phone Number"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+              className="form-input"
+              pattern="[0-9]{10,15}"
+              title="Please enter a valid phone number"
             />
           </div>
 

@@ -1,0 +1,279 @@
+/* LessonItem.css - Individual Lesson Card Styles */
+
+/**
+ * Lesson Item
+ * 
+ * Card component for each lesson
+ * Features:
+ * - Left accent border indicator (teal when selected)
+ * - Checkbox for marking complete
+ * - Hover effects with scale and shadow
+ * - Focus-visible for keyboard navigation
+ * - Smooth transitions
+ */
+.lesson-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: rgba(0, 217, 255, 0.05);
+  border: 1px solid rgba(0, 217, 255, 0.15);
+  border-radius: 10px;
+  border-left: 4px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/**
+ * Lesson Item - Hover State
+ * 
+ * Subtle lift and glow effect
+ * Scale 1.02 with shadow
+ * Slightly brighter background
+ */
+.lesson-item:hover {
+  background: rgba(0, 217, 255, 0.08);
+  border-color: rgba(0, 217, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 217, 255, 0.15);
+  border-left-color: #00d9ff;
+}
+
+/**
+ * Lesson Item - Focus State
+ * 
+ * Keyboard focus visible outline
+ * High contrast for accessibility
+ */
+.lesson-item:focus-visible {
+  outline: 2px solid #00ff7f;
+  outline-offset: 2px;
+  background: rgba(0, 217, 255, 0.1);
+}
+
+/**
+ * Lesson Item - Active/Selected State
+ * 
+ * Left border becomes bright teal
+ * Slightly elevated background
+ */
+.lesson-item--selected {
+  background: rgba(0, 217, 255, 0.1);
+  border-left-color: #00d9ff;
+  border-color: rgba(0, 217, 255, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 217, 255, 0.1);
+}
+
+/**
+ * Lesson Item - Completed State
+ * 
+ * Different color scheme for completed lessons
+ * Green accent for completion status
+ */
+.lesson-item--completed {
+  opacity: 0.85;
+}
+
+.lesson-item--completed .lesson-item__checkbox {
+  border-color: #00ff7f;
+  background: rgba(0, 255, 127, 0.1);
+}
+
+/**
+ * Checkbox Container
+ * 
+ * Square container for custom checkbox
+ */
+.lesson-item__check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/**
+ * Checkbox Input
+ * 
+ * Custom styled checkbox
+ * Teal border with subtle background
+ */
+.lesson-item__checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(0, 217, 255, 0.4);
+  background: rgba(0, 217, 255, 0.05);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.lesson-item__checkbox:hover {
+  border-color: rgba(0, 217, 255, 0.6);
+  background: rgba(0, 217, 255, 0.08);
+}
+
+.lesson-item__checkbox:focus-visible {
+  outline: 2px solid #00ff7f;
+  outline-offset: 2px;
+  border-color: #00d9ff;
+}
+
+.lesson-item__checkbox:checked {
+  background: rgba(0, 255, 127, 0.15);
+  border-color: #00ff7f;
+}
+
+/**
+ * Checkmark Icon
+ * 
+ * SVG icon overlaid on checkbox when checked
+ */
+.lesson-item__checkicon {
+  position: absolute;
+  color: #00ff7f;
+  pointer-events: none;
+}
+
+/**
+ * Content Container
+ * 
+ * Flex column for title, description, meta
+ */
+.lesson-item__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/**
+ * Lesson Title
+ * 
+ * Primary text for lesson name
+ */
+.lesson-item__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: color 0.2s ease;
+}
+
+.lesson-item:hover .lesson-item__title {
+  color: #ffffff;
+}
+
+/**
+ * Lesson Description
+ * 
+ * Secondary text with lesson details
+ */
+.lesson-item__description {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(200, 220, 255, 0.7);
+  line-height: 1.4;
+}
+
+/**
+ * Footer with Meta Information
+ * 
+ * Duration badge and completion badge
+ */
+.lesson-item__footer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 12px;
+}
+
+.lesson-item__duration {
+  color: rgba(200, 220, 255, 0.6);
+  font-weight: 500;
+}
+
+/**
+ * Completion Badge
+ * 
+ * Green badge for completed lessons
+ */
+.lesson-item__badge {
+  background: rgba(0, 255, 127, 0.15);
+  color: #00ff7f;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+/**
+ * Left Accent Border
+ * 
+ * Decorative element (hidden with aria-hidden)
+ */
+.lesson-item__accent {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: transparent;
+  transition: background 0.2s ease;
+}
+
+/**
+ * Responsive: Tablet
+ */
+@media (max-width: 1024px) {
+  .lesson-item {
+    padding: 1rem;
+  }
+
+  .lesson-item__title {
+    font-size: 15px;
+  }
+
+  .lesson-item__description {
+    font-size: 12px;
+  }
+
+  .lesson-item__footer {
+    font-size: 11px;
+  }
+}
+
+/**
+ * Responsive: Mobile
+ */
+@media (max-width: 640px) {
+  .lesson-item {
+    padding: 0.875rem;
+    gap: 0.75rem;
+  }
+
+  .lesson-item__title {
+    font-size: 14px;
+  }
+
+  .lesson-item__description {
+    font-size: 11px;
+  }
+
+  .lesson-item__check {
+    min-width: 20px;
+    height: 20px;
+  }
+
+  .lesson-item__checkbox {
+    width: 18px;
+    height: 18px;
+  }
+}

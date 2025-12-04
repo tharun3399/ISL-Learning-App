@@ -143,16 +143,6 @@
   text-align: center;
 }
 
-.nav-link-btn {
-  padding: 10px 22px;
-  border-radius: 12px;
-  border: 1px solid rgba(0,217,255,0.25);
-  background: rgba(0,217,255,0.06);
-  color: rgba(0,217,255,0.95);
-  font-weight: 600;
-  cursor: pointer;
-}
-
 /* Player section */
 .video-player-section {
   display: flex;

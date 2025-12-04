@@ -23,7 +23,7 @@ export default function ProgressCard({ completionPercent, completedLessons, tota
     { name: 'Remaining', value: 100 - completionPercent }
   ]
 
-  const COLORS = ['#00ff7f', 'rgba(0, 217, 255, 0.1)']
+  const COLORS = ['#00CFFF', 'rgba(255,255,255,0.15)']
 
   return (
     <aside className="progress-card" role="complementary" aria-label="Progress summary">
@@ -40,10 +40,11 @@ export default function ProgressCard({ completionPercent, completedLessons, tota
               data={donutData}
               cx="50%"
               cy="50%"
-              innerRadius={60}
-              outerRadius={100}
-              paddingAngle={2}
+              innerRadius={70}
+              outerRadius={105}
+              paddingAngle={3}
               dataKey="value"
+              stroke="none"
             >
               {donutData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index]} />

@@ -13,7 +13,7 @@
   --transition: all 0.3s ease;
 }
 
-/**
+/*
  * Dashboard Container
  * 
  * Main flex container for three-column layout:
@@ -35,10 +35,13 @@
  * Flex layout for lesson list and progress card
  * Responsive: 2-column on desktop, stacked on mobile
  */
+/* Dashboard Main - horizontal layout, no extra gap */
 .dashboard-main {
   display: flex;
   flex: 1;
   gap: 0;
+  align-items: stretch;
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -53,24 +56,42 @@
  * Takes ~60% width on desktop
  * Scrollable for long lesson lists
  */
+/* Lesson List Container - resizable, no scrollbar */
 .lesson-list-container {
-  flex: 1.5;
   overflow-y: auto;
   padding: 2rem;
-  border-right: 1px solid var(--border-color);
+  border-right: none;
+  min-width: 200px;
+  scrollbar-width: none;
+}
+.lesson-list-container::-webkit-scrollbar {
+  display: none;
 }
 
-/**
- * Right Sidebar - Progress Card
- * 
- * Takes ~25-30% width on desktop
- * Sticky position to keep visible while scrolling
- */
+/* Resize Handle - transparent, no highlight */
+.dashboard-resize-handle {
+  width: 8px;
+  cursor: col-resize;
+  background: transparent;
+  border-radius: 6px;
+  position: relative;
+  z-index: 2;
+  margin: 0;
+}
+.dashboard-resize-handle:hover, .dashboard-resize-handle:focus {
+  background: transparent;
+}
+
+/* Progress Card Sidebar - resizable, no scrollbar */
 .dashboard-aside {
-  flex: 0 0 25%;
   overflow-y: auto;
   padding: 2rem;
   background: rgba(0, 0, 0, 0.2);
+  min-width: 200px;
+  scrollbar-width: none;
+}
+.dashboard-aside::-webkit-scrollbar {
+  display: none;
 }
 
 /**
@@ -122,27 +143,4 @@
  * Scrollbar Styling
  * Dark theme scrollbar
  */
-.dashboard-main::-webkit-scrollbar,
-.lesson-list-container::-webkit-scrollbar,
-.dashboard-aside::-webkit-scrollbar {
-  width: 8px;
-}
-
-.dashboard-main::-webkit-scrollbar-track,
-.lesson-list-container::-webkit-scrollbar-track,
-.dashboard-aside::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.dashboard-main::-webkit-scrollbar-thumb,
-.lesson-list-container::-webkit-scrollbar-thumb,
-.dashboard-aside::-webkit-scrollbar-thumb {
-  background: rgba(0, 217, 255, 0.3);
-  border-radius: 4px;
-}
-
-.dashboard-main::-webkit-scrollbar-thumb:hover,
-.lesson-list-container::-webkit-scrollbar-thumb:hover,
-.dashboard-aside::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 217, 255, 0.5);
-}
+/* Removed custom scrollbar styles for default scrolling */

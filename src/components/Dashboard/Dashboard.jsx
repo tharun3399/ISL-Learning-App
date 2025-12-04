@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import Navbar from './Navbar'
+import React, { useState, useRef } from 'react'
 import LessonList from './LessonList'
 import ProgressCard from './ProgressCard'
 import './Dashboard.css'
@@ -30,7 +29,9 @@ const mockLessons = [
 export default function Dashboard() {
   const [lessons, setLessons] = useState(mockLessons)
   const [selectedLessonId, setSelectedLessonId] = useState(null)
-  const navigate = useNavigate()
+  const [lessonListWidth, setLessonListWidth] = useState(55) // percent
+  const [isResizing, setIsResizing] = useState(false)
+  const dashboardMainRef = useRef(null)
 
   const handleToggleLesson = id => {
     setLessons(prev => prev.map(l => l.id === id ? { ...l, completed: !l.completed } : l))
@@ -38,29 +39,73 @@ export default function Dashboard() {
 
   const handleSelectLesson = id => setSelectedLessonId(id)
 
-  const handleAccountClick = () => {
-    navigate('account')
-  }
-
   const completedCount = lessons.filter(l => l.completed).length
   const completionPercent = Math.round((completedCount / lessons.length) * 100)
 
+  // Resize logic
+  const handleMouseDown = e => {
+    setIsResizing(true)
+    document.body.style.cursor = 'col-resize'
+  }
+  const handleMouseUp = () => {
+    setIsResizing(false)
+    document.body.style.cursor = ''
+  }
+  const handleMouseMove = e => {
+    if (!isResizing || !dashboardMainRef.current) return
+    const rect = dashboardMainRef.current.getBoundingClientRect()
+    let x = e.clientX - rect.left
+    let percent = (x / rect.width) * 100
+    // Clamp between 30% and 70%
+    percent = Math.max(30, Math.min(70, percent))
+    setLessonListWidth(percent)
+  }
+
+  React.useEffect(() => {
+    if (isResizing) {
+      window.addEventListener('mousemove', handleMouseMove)
+      window.addEventListener('mouseup', handleMouseUp)
+    } else {
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
+    }
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
+    }
+  }, [isResizing])
+
   return (
-    <div className="dashboard-container">
-      <Navbar onAccountClick={handleAccountClick} />
-      <main className="dashboard-main">
-        <LessonList
-          lessons={lessons}
-          selectedId={selectedLessonId}
-          onSelect={handleSelectLesson}
-          onToggleComplete={handleToggleLesson}
+    <main className="dashboard-main" ref={dashboardMainRef}>
+        <div
+          style={{ width: `calc(${lessonListWidth}% - 4px)`, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}
+        >
+          <LessonList
+            lessons={lessons}
+            selectedId={selectedLessonId}
+            onSelect={handleSelectLesson}
+            onToggleComplete={handleToggleLesson}
+          />
+        </div>
+        <div
+          className="dashboard-resize-handle"
+          onMouseDown={handleMouseDown}
+          role="separator"
+          aria-orientation="vertical"
+          tabIndex={0}
+          title="Resize sections"
+          style={{ height: '100%', width: '8px', cursor: 'col-resize', background: 'transparent', borderRadius: '6px', position: 'relative', zIndex: 2 }}
         />
-        <ProgressCard
-          completionPercent={completionPercent}
-          completedLessons={completedCount}
-          totalLessons={lessons.length}
-        />
+        <aside
+          className="dashboard-aside"
+          style={{ width: `calc(${100 - lessonListWidth}% - 4px)` }}
+        >
+          <ProgressCard
+            completionPercent={completionPercent}
+            completedLessons={completedCount}
+            totalLessons={lessons.length}
+          />
+        </aside>
       </main>
-    </div>
-  )
+    )
 }

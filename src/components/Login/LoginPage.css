@@ -133,6 +133,8 @@
 
 .forgot:hover {
   text-decoration: underline;
+}
+
 .primary {
   margin-top: 8px;
   background: linear-gradient(135deg, #00ff7f, #ffffff);
@@ -148,9 +150,6 @@
 }
 
 .primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 48px rgba(0, 255, 127, 0.35);
-}primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 16px 48px rgba(0,217,255,0.35);
 }
@@ -302,5 +301,4 @@
   .forgot {
     white-space: normal;
   }
-}
 }

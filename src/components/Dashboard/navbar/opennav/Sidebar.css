@@ -1,0 +1,356 @@
+/* Sidebar.css - Responsive Sidebar Navigation with Animations */
+
+/**
+ * Hamburger Toggle Button
+ * 
+ * Fixed positioned button that's always visible
+ * Positioned at top-left of the viewport
+ * Z-index ensures it stays on top of sidebar
+ */
+.sidebar-toggle-btn {
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, var(--bg-dark-secondary) 0%, rgba(26, 31, 58, 0.9) 100%);
+  border: 1.5px solid rgba(0, 217, 255, 0.25);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 999;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  padding: 0;
+}
+
+.sidebar-toggle-btn:hover {
+  background: linear-gradient(135deg, rgba(0, 217, 255, 0.12) 0%, rgba(0, 255, 127, 0.08) 100%);
+  border-color: rgba(0, 217, 255, 0.4);
+  transform: scale(1.05);
+  box-shadow: 0 6px 24px rgba(0, 217, 255, 0.2);
+}
+
+.sidebar-toggle-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/**
+ * Hamburger Icon
+ * 
+ * Three horizontal lines that animate into an X
+ */
+.hamburger-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 24px;
+  height: 24px;
+  position: relative;
+}
+
+.line {
+  width: 100%;
+  height: 3px;
+  background: var(--accent-cyan);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+/* Hamburger icon animation when sidebar is open */
+.sidebar-toggle-btn[aria-expanded="true"] .line-1 {
+  transform: rotate(45deg) translate(8px, 8px);
+}
+
+.sidebar-toggle-btn[aria-expanded="true"] .line-2 {
+  opacity: 0;
+}
+
+.sidebar-toggle-btn[aria-expanded="true"] .line-3 {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/**
+ * Overlay Backdrop
+ * 
+ * Semi-transparent backdrop that appears when sidebar opens
+ * Closes sidebar when clicked
+ */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/**
+ * Sidebar Container
+ * 
+ * Main sidebar navigation
+ * Slides in from left with smooth animation
+ * Position: fixed to always be visible
+ * Width: 250px when open, 0 when closed
+ */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 250px;
+  background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-dark-secondary) 100%);
+  border-right: 1.5px solid rgba(0, 217, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  z-index: 997;
+  transform: translateX(-250px);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 217, 255, 0.3) transparent;
+}
+
+/* When sidebar is open */
+.sidebar--open {
+  transform: translateX(0);
+}
+
+/* Custom scrollbar for sidebar */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(0, 217, 255, 0.3);
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 217, 255, 0.5);
+}
+
+/**
+ * Sidebar Header
+ * 
+ * Title and close button
+ */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(0, 217, 255, 0.1);
+  gap: 1rem;
+}
+
+.sidebar-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  white-space: nowrap;
+}
+
+.sidebar-close-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--accent-cyan);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.sidebar-close-btn:hover {
+  background: rgba(0, 217, 255, 0.1);
+  color: var(--accent);
+}
+
+/**
+ * Sidebar Navigation
+ * 
+ * Menu items container
+ */
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 0;
+}
+
+.sidebar-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sidebar-menu-item {
+  margin: 0;
+}
+
+/**
+ * Sidebar Menu Link
+ * 
+ * Individual menu items
+ * Hover effect with smooth transition
+ */
+.sidebar-menu-link {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0.875rem 1rem;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  border-left: 3px solid transparent;
+  font-family: inherit;
+}
+
+.sidebar-menu-link:hover {
+  background: rgba(0, 217, 255, 0.08);
+  color: var(--text-primary);
+  border-left-color: var(--accent-cyan);
+  transform: translateX(4px);
+}
+
+.sidebar-menu-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  background: rgba(0, 217, 255, 0.1);
+}
+
+.sidebar-menu-link:active {
+  background: rgba(0, 217, 255, 0.15);
+  border-left-color: var(--accent);
+  color: var(--accent);
+}
+
+/**
+ * Sidebar Footer
+ * 
+ * Footer text at bottom of sidebar
+ */
+.sidebar-footer {
+  padding: 1rem;
+  border-top: 1px solid rgba(0, 217, 255, 0.1);
+  text-align: center;
+}
+
+.sidebar-footer-text {
+  margin: 0;
+  font-size: 12px;
+  color: rgba(200, 220, 255, 0.5);
+  letter-spacing: 0.5px;
+}
+
+/**
+ * Tablet: Show sidebar close button
+ */
+@media (max-width: 1024px) {
+  .sidebar-close-btn {
+    display: flex;
+  }
+
+  .sidebar-toggle-btn {
+    top: 1rem;
+    left: 1rem;
+    width: 44px;
+    height: 44px;
+  }
+
+  .hamburger-icon {
+    width: 20px;
+    height: 20px;
+    gap: 5px;
+  }
+
+  .line {
+    height: 2.5px;
+  }
+}
+
+/**
+ * Mobile: Optimize for smaller screens
+ */
+@media (max-width: 640px) {
+  .sidebar {
+    width: 280px;
+    transform: translateX(-280px);
+  }
+
+  .sidebar--open {
+    transform: translateX(0);
+  }
+
+  .sidebar-toggle-btn {
+    top: 0.75rem;
+    left: 0.75rem;
+    width: 40px;
+    height: 40px;
+  }
+
+  .hamburger-icon {
+    width: 18px;
+    height: 18px;
+    gap: 4px;
+  }
+
+  .line {
+    height: 2.5px;
+  }
+
+  .sidebar-header {
+    padding: 1rem;
+  }
+
+  .sidebar-title {
+    font-size: 16px;
+  }
+
+  .sidebar-menu-link {
+    padding: 0.75rem 0.875rem;
+    font-size: 14px;
+  }
+
+  .sidebar-footer-text {
+    font-size: 11px;
+  }
+}

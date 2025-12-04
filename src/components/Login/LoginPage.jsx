@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './LoginPage.css'
 
@@ -12,10 +12,16 @@ function SocialButton({ children, onClick, className }) {
 
 export default function LoginPage() {
   const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(false)
   
   function handleLogin(e) {
     e.preventDefault()
     navigate('/dashboard')
+  }
+
+  const togglePasswordVisibility = (e) => {
+    e.preventDefault()
+    setShowPassword(!showPassword)
   }
 
   return (
@@ -40,12 +46,22 @@ export default function LoginPage() {
                 <div style={{flex:1}}>
                   <label className="label">Password</label>
                   <br />
-                  <input 
-                    className="input underline password-input" 
-                    type="password" 
-                    placeholder="Enter your password" 
-                    required 
-                  />
+                  <div className="password-input-wrapper">
+                    <input 
+                      className="input underline password-input" 
+                      type={showPassword ? "text" : "password"} 
+                      placeholder="Enter your password" 
+                      required 
+                    />
+                    <button 
+                      className="password-toggle-btn" 
+                      onClick={togglePasswordVisibility}
+                      type="button"
+                      title={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? "👁️" : "👁️‍🗨️"}
+                    </button>
+                  </div>
                   <div className="input-help">Use at least 8 characters. Avoid common words.</div>
                 </div>
                 <a className="forgot" href="#">Forgot?</a>

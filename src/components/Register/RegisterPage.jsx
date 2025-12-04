@@ -4,6 +4,8 @@ import './RegisterPage.css'
 
 export default function RegisterPage() {
   const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -24,6 +26,16 @@ export default function RegisterPage() {
       return
     }
     navigate('/dashboard')
+  }
+
+  const togglePasswordVisibility = (e) => {
+    e.preventDefault()
+    setShowPassword(!showPassword)
+  }
+
+  const toggleConfirmPasswordVisibility = (e) => {
+    e.preventDefault()
+    setShowConfirmPassword(!showConfirmPassword)
   }
 
   return (
@@ -72,27 +84,47 @@ export default function RegisterPage() {
           </div>
 
           <div className="form-group">
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="form-input"
-            />
+            <div className="password-input-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                className="form-input"
+              />
+              <button 
+                className="password-toggle-btn" 
+                onClick={togglePasswordVisibility}
+                type="button"
+                title={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? "👁️" : "👁️‍🗨️"}
+              </button>
+            </div>
           </div>
 
           <div className="form-group">
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-              className="form-input"
-            />
+            <div className="password-input-wrapper">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+                className="form-input"
+              />
+              <button 
+                className="password-toggle-btn" 
+                onClick={toggleConfirmPasswordVisibility}
+                type="button"
+                title={showConfirmPassword ? "Hide password" : "Show password"}
+              >
+                {showConfirmPassword ? "👁️" : "👁️‍🗨️"}
+              </button>
+            </div>
           </div>
 
           <button type="submit" className="register-btn">Create Account</button>

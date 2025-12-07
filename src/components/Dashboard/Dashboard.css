@@ -82,14 +82,18 @@
   background: transparent;
 }
 
-/* Progress Card Sidebar - resizable, no scrollbar */
+/* Progress Card Sidebar - resizable, scrollable */
 .dashboard-aside {
   overflow-y: auto;
-  padding: 2rem;
+  padding: 1.5rem;
   background: rgba(0, 0, 0, 0.2);
   min-width: 200px;
   scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
+
 .dashboard-aside::-webkit-scrollbar {
   display: none;
 }

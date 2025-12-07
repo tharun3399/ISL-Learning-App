@@ -1,4 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../../../context/AuthContext';
+import axios from 'axios';
 import './AccountBasicInfo.css';
 
 const initialUser = {
@@ -12,10 +15,22 @@ const initialUser = {
 const roles = ['Learner', 'Teacher'];
 
 export default function AccountBasicInfo() {
-  const [user, setUser] = useState(initialUser);
+  const navigate = useNavigate();
+  const { user: authUser, setState } = useContext(AuthContext);
+  
+  // Merge auth user data with initial user template
+  const mergedInitialUser = {
+    photo: '',
+    name: authUser?.name || initialUser.name,
+    email: authUser?.email || initialUser.email,
+    mobile: authUser?.phone || initialUser.mobile,
+    role: 'Learner'
+  };
+  
+  const [user, setUser] = useState(mergedInitialUser);
   const [editMode, setEditMode] = useState(false);
-  const [form, setForm] = useState(user);
-  const [photoPreview, setPhotoPreview] = useState(user.photo);
+  const [form, setForm] = useState(mergedInitialUser);
+  const [photoPreview, setPhotoPreview] = useState('');
   const [errors, setErrors] = useState({});
   const fileInputRef = useRef();
 
@@ -85,6 +100,19 @@ export default function AccountBasicInfo() {
     setUser(updated);
     setEditMode(false);
     setErrors({});
+  };
+
+  const handleLogout = async () => {
+    try {
+      await axios.post('http://localhost:5000/logout', {}, { withCredentials: true });
+      setState({ authenticated: false, user: null, loading: false });
+      navigate('/login');
+    } catch (err) {
+      console.error('Logout error:', err);
+      // Still navigate to login even if logout endpoint fails
+      setState({ authenticated: false, user: null, loading: false });
+      navigate('/login');
+    }
   };
 
   const FallbackAvatar = (
@@ -216,14 +244,24 @@ export default function AccountBasicInfo() {
               </button>
             </>
           ) : (
-            <button
-              type="button"
-              className="account-card__btn account-card__btn--edit"
-              onClick={handleEdit}
-              aria-label="Edit info"
-            >
-              &#9998; Edit
-            </button>
+            <>
+              <button
+                type="button"
+                className="account-card__btn account-card__btn--edit"
+                onClick={handleEdit}
+                aria-label="Edit info"
+              >
+                &#9998; Edit
+              </button>
+              <button
+                type="button"
+                className="account-card__btn account-card__btn--logout"
+                onClick={handleLogout}
+                aria-label="Logout"
+              >
+                &#128682; Logout
+              </button>
+            </>
           )}
         </div>
       </form>

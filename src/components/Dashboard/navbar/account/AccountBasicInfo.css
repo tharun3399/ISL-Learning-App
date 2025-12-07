@@ -194,6 +194,16 @@
   background: var(--accent-pink);
   color: #fff;
 }
+.account-card__btn--logout {
+  background: var(--bg-dark-secondary);
+  color: var(--accent-pink);
+  border: 1px solid var(--accent-pink);
+}
+.account-card__btn--logout:hover,
+.account-card__btn--logout:focus-visible {
+  background: var(--accent-pink);
+  color: #fff;
+}
 
 @media (max-width: 700px) {
   .account-card {

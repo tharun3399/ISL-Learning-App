@@ -1,16 +1,17 @@
 import React, { useState, useRef } from 'react'
 import LessonList from './LessonList'
 import ProgressCard from './ProgressCard'
+import Avatar3D from './Avatar3D'
 import './Dashboard.css'
 
 /**
  * Dashboard Component
  * 
  * Main dashboard layout for ISL lesson learning experience.
- * Three-column layout: Navbar | Lesson List | Progress Card
+ * Three-column layout: Navbar | Lesson List | Progress Card + Avatar
  * 
  * Required packages:
- * - npm i recharts react-icons
+ * - npm i recharts react-icons three
  */
 
 const mockLessons = [
@@ -98,13 +99,14 @@ export default function Dashboard() {
         />
         <aside
           className="dashboard-aside"
-          style={{ width: `calc(${100 - lessonListWidth}% - 4px)` }}
+          style={{ width: `calc(${100 - lessonListWidth}% - 4px)`, display: 'flex', flexDirection: 'column', gap: '16px', padding: '16px' }}
         >
           <ProgressCard
             completionPercent={completionPercent}
             completedLessons={completedCount}
             totalLessons={lessons.length}
           />
+          <Avatar3D />
         </aside>
       </main>
     )

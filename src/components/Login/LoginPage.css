@@ -261,14 +261,7 @@ input:-webkit-autofill {
 
 .social-btn.google {
   background: linear-gradient(180deg, rgba(0,217,255,0.12), rgba(0,217,255,0.06));
-}
-
-.social-btn.github {
-  background: linear-gradient(180deg, rgba(255,0,110,0.08), rgba(0,217,255,0.06));
-}
-
-.social-btn.facebook {
-  background: linear-gradient(90deg, rgba(255,0,110,0.08), rgba(0,217,255,0.06));
+  width: 100%;
 }
 
 .card-right .right-inner {

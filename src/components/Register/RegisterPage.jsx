@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './RegisterPage.css'
+import axios from 'axios'
 
 export default function RegisterPage() {
   const navigate = useNavigate()
@@ -19,14 +20,32 @@ export default function RegisterPage() {
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleRegister = (e) => {
-    e.preventDefault()
-    if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match')
-      return
-    }
-    navigate('/dashboard')
+  const handleRegister = async (e) => {
+  e.preventDefault();
+
+  if (formData.password !== formData.confirmPassword) {
+    alert('Passwords do not match');
+    return;
   }
+
+  // optional: basic client-side validation example
+  if (!formData.email || !formData.name) {
+    alert('Name and email are required');
+    return;
+  }
+
+  try {
+    console.log('Registering user with', formData);
+    const res = await axios.post('http://localhost:5000/register', formData);
+    console.log('Registration successful:', res.data);
+    // optionally show success message before navigate
+    navigate('/dashboard');
+  } catch (err) {
+    console.error('Registration error:', err);
+    const msg = err.response?.data?.message || 'Registration failed. Please try again.';
+    alert(msg);
+  }
+};
 
   const togglePasswordVisibility = (e) => {
     e.preventDefault()

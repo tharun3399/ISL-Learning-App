@@ -19,7 +19,7 @@
   font-size: 28px;
   font-weight: 700;
   margin-bottom: 16px;
-  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+  background: linear-gradient(135deg, var(--textPrimary, #ffffff) 0%, var(--accent, #00ff7f) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -37,7 +37,7 @@
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--bg-dark-secondary) 100%);
+  background: linear-gradient(135deg, var(--accentCyan, #00d9ff) 0%, var(--bgDarkSecondary, #1a1f3a) 100%);
   box-shadow: 0 4px 16px rgba(0,217,255,0.10);
   display: flex;
   align-items: center;
@@ -48,7 +48,7 @@
 }
 .account-card__avatar:focus-visible,
 .account-card__avatar:hover {
-  box-shadow: 0 0 0 3px var(--accent), 0 4px 16px rgba(0,217,255,0.18);
+  box-shadow: 0 0 0 3px var(--accent, #00ff7f), 0 4px 16px rgba(0,217,255,0.18);
 }
 
 .account-card__avatar-img {
@@ -64,8 +64,8 @@
   bottom: -36px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--accent);
-  color: var(--bg-dark-secondary);
+  background: var(--accent, #00ff7f);
+  color: var(--bgDarkSecondary, #1a1f3a);
   border: none;
   border-radius: 16px;
   padding: 6px 16px;

@@ -27,6 +27,21 @@
   background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-dark-secondary) 100%);
   color: var(--text-primary);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  position: relative;
+}
+
+.dashboard-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 0, 110, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 /**
@@ -43,6 +58,8 @@
   align-items: stretch;
   min-height: 0;
   overflow: hidden;
+  position: relative;
+  z-index: 1;
 }
 
 /**
@@ -60,12 +77,32 @@
 .lesson-list-container {
   overflow-y: auto;
   padding: 2rem;
-  border-right: none;
+  border-right: 1px solid rgba(0, 217, 255, 0.08);
   min-width: 200px;
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 217, 255, 0.3) transparent;
+  flex: 1;
+  background: linear-gradient(to bottom, 
+    rgba(10, 14, 39, 0.4) 0%,
+    rgba(26, 31, 58, 0.2) 100%
+  );
 }
+
 .lesson-list-container::-webkit-scrollbar {
-  display: none;
+  width: 6px;
+}
+
+.lesson-list-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.lesson-list-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 217, 255, 0.3);
+  border-radius: 3px;
+}
+
+.lesson-list-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 217, 255, 0.5);
 }
 
 /* Resize Handle - transparent, no highlight */
@@ -77,25 +114,43 @@
   position: relative;
   z-index: 2;
   margin: 0;
+  transition: background 0.3s ease;
 }
+
 .dashboard-resize-handle:hover, .dashboard-resize-handle:focus {
-  background: transparent;
+  background: rgba(0, 217, 255, 0.2);
 }
 
 /* Progress Card Sidebar - resizable, scrollable */
 .dashboard-aside {
   overflow-y: auto;
   padding: 1.5rem;
-  background: rgba(0, 0, 0, 0.2);
-  min-width: 200px;
-  scrollbar-width: none;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 217, 255, 0.05) 100%);
+  min-width: 250px;
+  max-width: 350px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 217, 255, 0.3) transparent;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  border-left: 1px solid rgba(0, 217, 255, 0.1);
 }
 
 .dashboard-aside::-webkit-scrollbar {
-  display: none;
+  width: 6px;
+}
+
+.dashboard-aside::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dashboard-aside::-webkit-scrollbar-thumb {
+  background: rgba(0, 217, 255, 0.3);
+  border-radius: 3px;
+}
+
+.dashboard-aside::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 217, 255, 0.5);
 }
 
 /**
@@ -111,13 +166,17 @@
   .lesson-list-container {
     flex: 1;
     padding: 1.5rem;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
   }
 
   .dashboard-aside {
     flex: 0 0 auto;
     border-top: 1px solid var(--border-color);
+    border-left: none;
     border-right: none;
     padding: 1.5rem;
+    max-width: none;
   }
 }
 
@@ -138,13 +197,14 @@
 
   .dashboard-aside {
     border-top: 1px solid var(--border-color);
+    border-left: none;
     border-right: none;
     padding: 1rem;
+    max-width: none;
   }
 }
 
 /**
- * Scrollbar Styling
- * Dark theme scrollbar
+ * Custom Scrollbar Styling
+ * Thin, subtle scrollbars that match the theme
  */
-/* Removed custom scrollbar styles for default scrolling */

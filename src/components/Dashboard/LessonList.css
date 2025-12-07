@@ -10,49 +10,23 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  align-items: center;
+  min-height: auto;
+  align-items: stretch;
   justify-content: flex-start;
-  background: var(--gradient);
+  background: transparent;
   position: relative;
-  padding: 32px 20px;
+  padding: 0;
   overflow: hidden;
-}
-
-.lesson-list-container::before {
-  content: '';
-  position: absolute;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(0,217,255,0.10) 0%, transparent 70%);
-  border-radius: 50%;
-  top: -100px;
-  left: -100px;
-  pointer-events: none;
-  z-index: 0;
-}
-.lesson-list-container::after {
-  content: '';
-  position: absolute;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(255,0,110,0.08) 0%, transparent 70%);
-  border-radius: 50%;
-  bottom: -100px;
-  right: -100px;
-  pointer-events: none;
-  z-index: 0;
 }
 
 .lesson-list-header {
   margin-bottom: 2rem;
-  background: rgba(15, 20, 40, 0.8);
+  padding: 1.5rem;
+  background: rgba(15, 20, 40, 0.6);
   backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 217, 255, 0.1);
+  border-radius: 0;
   border: 1px solid rgba(0, 217, 255, 0.15);
-  border-radius: 16px;
-  padding: 32px 32px 24px 32px;
-  max-width: 100%;
-  max-width: 700px;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
   position: relative;
   z-index: 1;

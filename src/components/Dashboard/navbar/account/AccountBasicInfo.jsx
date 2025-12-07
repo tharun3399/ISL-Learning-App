@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useRef, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../../context/AuthContext';
 import axios from 'axios';
@@ -18,88 +18,137 @@ export default function AccountBasicInfo() {
   const navigate = useNavigate();
   const { user: authUser, setState } = useContext(AuthContext);
   
-  // Merge auth user data with initial user template
-  const mergedInitialUser = {
-    photo: '',
-    name: authUser?.name || initialUser.name,
-    email: authUser?.email || initialUser.email,
-    mobile: authUser?.phone || initialUser.mobile,
-    role: 'Learner'
-  };
+  // Ensure all properties have default values to prevent undefined input values
+  const createUserObject = (data) => ({
+    photo: data?.photo || '',
+    name: data?.name || 'User',
+    email: data?.email || 'user@example.com',
+    mobile: data?.phone || data?.mobile || '',
+    role: data?.role || 'Learner'
+  });
+
+  const initialUserData = createUserObject(authUser);
   
-  const [user, setUser] = useState(mergedInitialUser);
+  const [user, setUser] = useState(initialUserData);
   const [editMode, setEditMode] = useState(false);
-  const [form, setForm] = useState(mergedInitialUser);
+  const [formData, setFormData] = useState(initialUserData);
   const [photoPreview, setPhotoPreview] = useState('');
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef();
 
-  const toggleEditMode = () => {
-    setEditMode(!editMode);
-    if (!editMode) {
-      setForm(user);
-      setPhotoPreview(user.photo);
-      setErrors({});
+  // Load saved photo from localStorage on component mount
+  useEffect(() => {
+    const savedPhoto = localStorage.getItem(`user_photo_${initialUserData.email}`);
+    if (savedPhoto) {
+      setPhotoPreview(savedPhoto);
+      setUser(prev => ({ ...prev, photo: savedPhoto }));
+      setFormData(prev => ({ ...prev, photo: savedPhoto }));
     }
-  };
-
-  const handleChange = e => {
-    const { name, value } = e.target;
-    setForm(f => ({ ...f, [name]: value }));
-    if (name === 'email') validateEmail(value);
-    if (name === 'mobile') validateMobile(value);
-  };
-
-  const validateEmail = email => {
-    const valid = /^[^@]+@[^@]+\.[^@]+$/.test(email);
-    setErrors(err => ({ ...err, email: valid ? '' : 'Invalid email address' }));
-    return valid;
-  };
-
-  const validateMobile = mobile => {
-    if (!mobile) {
-      setErrors(err => ({ ...err, mobile: '' }));
-      return true;
-    }
-    const valid = /^\+?[0-9]{8,15}$/.test(mobile);
-    setErrors(err => ({ ...err, mobile: valid ? '' : 'Invalid mobile number' }));
-    return valid;
-  };
-
-  const handlePhotoChange = e => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = ev => setPhotoPreview(ev.target.result);
-      reader.readAsDataURL(file);
-      setForm(f => ({ ...f, photo: file }));
-    }
-  };
+  }, [initialUserData.email]);
 
   const handleEdit = () => {
-    toggleEditMode();
+    setEditMode(true);
+    // Ensure all values are strings to prevent undefined inputs
+    setFormData({
+      photo: user.photo || '',
+      name: user.name || '',
+      email: user.email || '',
+      mobile: user.mobile || '',
+      role: user.role || 'Learner'
+    });
+    setPhotoPreview(user.photo || '');
+    setErrors({});
   };
 
   const handleCancel = () => {
-    toggleEditMode();
+    setEditMode(false);
+    setFormData(user);
+    setPhotoPreview('');
+    setErrors({});
   };
 
-  const handleSave = e => {
-    e.preventDefault();
-    const validEmail = validateEmail(form.email);
-    const validMobile = validateMobile(form.mobile);
-    if (!form.name.trim()) {
-      setErrors(err => ({ ...err, name: 'Name is required' }));
-      return;
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ 
+      ...prev, 
+      [name]: value || '' // Ensure value is never undefined, default to empty string
+    }));
+  };
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setPhotoPreview(event.target.result);
+        setFormData(prev => ({ ...prev, photo: event.target.result }));
+      };
+      reader.readAsDataURL(file);
     }
-    if (!validEmail || !validMobile) return;
-    const updated = {
-      ...form,
-      photo: typeof form.photo === 'string' ? form.photo : photoPreview
-    };
-    setUser(updated);
-    setEditMode(false);
-    setErrors({});
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.name.trim()) newErrors.name = 'Name is required';
+    if (!formData.email.trim()) newErrors.email = 'Email is required';
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (formData.email && !emailRegex.test(formData.email)) newErrors.email = 'Invalid email';
+    if (formData.mobile && !/^\+?[0-9]{8,15}$/.test(formData.mobile)) newErrors.mobile = 'Invalid phone';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    setLoading(true);
+    try {
+      // Send update to backend
+      const res = await axios.put('http://localhost:5000/profile', 
+        {
+          name: formData.name,
+          email: formData.email,
+          mobile: formData.mobile,
+          role: formData.role
+        }, 
+        { withCredentials: true }
+      );
+      
+      // Update local user state with response
+      const updatedUser = res.data.user;
+      setUser({
+        photo: user.photo,
+        name: updatedUser.name || formData.name,
+        email: updatedUser.email || formData.email,
+        mobile: updatedUser.phone || formData.mobile, // Backend returns 'phone', not 'mobile'
+        role: formData.role
+      });
+      
+      setFormData({
+        photo: user.photo,
+        name: updatedUser.name || formData.name,
+        email: updatedUser.email || formData.email,
+        mobile: updatedUser.phone || formData.mobile,
+        role: formData.role
+      });
+
+      // Save photo to localStorage if it was changed
+      if (photoPreview && photoPreview.startsWith('data:')) {
+        localStorage.setItem(`user_photo_${updatedUser.email}`, photoPreview);
+      }
+      
+      setEditMode(false);
+      setErrors({});
+      console.log('Profile updated successfully:', updatedUser);
+    } catch (err) {
+      console.error('Save error:', err);
+      const errorMsg = err.response?.data?.message || 'Failed to save changes';
+      setErrors({ general: errorMsg });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleLogout = async () => {
@@ -115,48 +164,10 @@ export default function AccountBasicInfo() {
     }
   };
 
-  const FallbackAvatar = (
-    <svg width="130" height="130" viewBox="0 0 80 80" aria-hidden="true">
-      <circle cx="40" cy="40" r="38" fill="#e0e7ef" stroke="#b0b8c1" strokeWidth="2"/>
-      <circle cx="40" cy="34" r="16" fill="#b0b8c1"/>
-      <ellipse cx="40" cy="62" rx="20" ry="12" fill="#b0b8c1"/>
-    </svg>
-  );
+  const FallbackAvatar = null; // Avatar removed
 
   return (
     <section className="account-card" aria-label="Basic User Information">
-      <div className="account-card__avatar-col">
-        <div
-          className="account-card__avatar"
-          tabIndex={0}
-          aria-label="Profile photo"
-          onClick={() => editMode && fileInputRef.current.click()}
-          style={{ cursor: editMode ? 'pointer' : 'default' }}
-        >
-          {photoPreview
-            ? <img src={photoPreview} alt="User avatar" className="account-card__avatar-img" />
-            : FallbackAvatar}
-          {editMode && (
-            <button
-              type="button"
-              className="account-card__photo-btn"
-              onClick={() => fileInputRef.current.click()}
-              aria-label="Change photo"
-            >
-              &#128247; Change photo
-            </button>
-          )}
-          <input
-            type="file"
-            accept="image/*"
-            ref={fileInputRef}
-            style={{ display: 'none' }}
-            onChange={handlePhotoChange}
-            tabIndex={-1}
-            aria-hidden="true"
-          />
-        </div>
-      </div>
       <form className="account-card__info-col" onSubmit={handleSave} aria-label="User info form">
         <div className="account-card__row">
           <label htmlFor="name" className="account-card__label">Full Name</label>
@@ -166,11 +177,9 @@ export default function AccountBasicInfo() {
               name="name"
               type="text"
               className="account-card__input"
-              value={form.name}
-              onChange={handleChange}
+              value={formData.name}
+              onChange={handleInputChange}
               required
-              aria-required="true"
-              aria-invalid={!!errors.name}
               autoFocus
             />
           ) : (
@@ -186,11 +195,9 @@ export default function AccountBasicInfo() {
               name="email"
               type="email"
               className="account-card__input"
-              value={form.email}
-              onChange={handleChange}
+              value={formData.email}
+              onChange={handleInputChange}
               required
-              aria-required="true"
-              aria-invalid={!!errors.email}
             />
           ) : (
             <span className="account-card__value">{user.email}</span>
@@ -205,10 +212,8 @@ export default function AccountBasicInfo() {
               name="mobile"
               type="tel"
               className="account-card__input"
-              value={form.mobile}
-              onChange={handleChange}
-              pattern="^\+?[0-9]{8,15}$"
-              aria-invalid={!!errors.mobile}
+              value={formData.mobile}
+              onChange={handleInputChange}
               placeholder="e.g. +919876543210"
             />
           ) : (
@@ -223,9 +228,8 @@ export default function AccountBasicInfo() {
               id="role"
               name="role"
               className="account-card__input"
-              value={form.role}
-              onChange={handleChange}
-              aria-readonly="false"
+              value={formData.role}
+              onChange={handleInputChange}
             >
               {roles.map(r => <option key={r} value={r}>{r}</option>)}
             </select>
@@ -236,10 +240,22 @@ export default function AccountBasicInfo() {
         <div className="account-card__actions">
           {editMode ? (
             <>
-              <button type="submit" className="account-card__btn account-card__btn--save" aria-label="Save changes">
+              <button
+                type="button"
+                className="account-card__btn account-card__btn--save"
+                onClick={handleSave}
+                disabled={loading}
+                aria-label="Save changes"
+              >
                 &#10003; Save
               </button>
-              <button type="button" className="account-card__btn account-card__btn--cancel" onClick={handleCancel} aria-label="Cancel edit">
+              <button
+                type="button"
+                className="account-card__btn account-card__btn--cancel"
+                onClick={handleCancel}
+                disabled={loading}
+                aria-label="Cancel edit"
+              >
                 &#10005; Cancel
               </button>
             </>

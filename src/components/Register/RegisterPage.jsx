@@ -1,10 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { GoogleLogin } from '@react-oauth/google'
+import { jwtDecode } from 'jwt-decode'
+import { AuthContext } from '../../context/AuthContext'
 import './RegisterPage.css'
 import axios from 'axios'
 
 export default function RegisterPage() {
   const navigate = useNavigate()
+  const { setState: setAuthState } = useContext(AuthContext)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [formData, setFormData] = useState({
@@ -55,6 +59,60 @@ export default function RegisterPage() {
   const toggleConfirmPasswordVisibility = (e) => {
     e.preventDefault()
     setShowConfirmPassword(!showConfirmPassword)
+  }
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      console.log('Google Sign-Up:', credentialResponse)
+      
+      // Decode Google token
+      const decoded = jwtDecode(credentialResponse.credential)
+      const googleData = {
+        email: decoded.email,
+        name: decoded.name,
+        picture: decoded.picture,
+        googleId: decoded.sub
+      }
+
+      // First, try to login if user already exists
+      try {
+        const loginRes = await axios.post(
+          'http://localhost:5000/login',
+          {
+            email: googleData.email,
+            google_id: googleData.googleId,
+            is_google_auth: true
+          },
+          { withCredentials: true }
+        )
+
+        // User already exists - login successful
+        const user = loginRes.data.user
+        if (setAuthState) {
+          setAuthState({ authenticated: true, user, loading: false })
+        }
+        console.log('User already exists, logged in:', loginRes.data)
+        navigate('/dashboard', { replace: true })
+      } catch (loginErr) {
+        // User doesn't exist - go to completion form
+        if (loginErr.response?.status === 401) {
+          console.log('User does not exist, going to completion form')
+          navigate('/register/complete', {
+            state: { googleData }
+          })
+        } else {
+          throw loginErr
+        }
+      }
+    } catch (err) {
+      console.error('Google Sign-Up error:', err)
+      alert('Google Sign-Up failed. Please try again.')
+    }
+  }
+
+  const handleGoogleError = () => {
+    console.log('Google Sign-Up failed')
+    alert('Google Sign-Up failed. Please try again.')
   }
 
   return (
@@ -148,6 +206,20 @@ export default function RegisterPage() {
 
           <button type="submit" className="register-btn">Create Account</button>
         </form>
+
+        <div className="divider">
+          <span>or</span>
+        </div>
+
+        <div className="google-signup">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={handleGoogleError}
+            text="signup_with"
+            theme="dark"
+            locale="en"
+          />
+        </div>
 
         <div className="register-footer">
           <p>Already have an account? <button onClick={() => navigate('/login')} className="sign-in-link">Sign in</button></p>

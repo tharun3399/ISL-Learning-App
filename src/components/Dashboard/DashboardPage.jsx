@@ -40,7 +40,7 @@ export default function DashboardPage() {
         element={
           <div className="dashboard-container">
             <Navbar onAccountClick={handleAccountClick} onSettingsClick={handleSettingsClick} onHomeClick={handleBackToDashboard} />
-            <main style={{ flex: 1, overflow: 'auto', background: 'var(--gradient)' }}>
+            <main style={{ flex: 1, overflow: 'auto', background: 'linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%)', padding: '2rem' }}>
               <AccountSection />
             </main>
           </div>
@@ -51,7 +51,7 @@ export default function DashboardPage() {
         element={
           <div className="dashboard-container">
             <Navbar onAccountClick={handleAccountClick} onSettingsClick={handleSettingsClick} onHomeClick={handleBackToDashboard} />
-            <main style={{ flex: 1, overflow: 'auto', background: 'var(--gradient)' }}>
+            <main style={{ flex: 1, overflow: 'auto', background: 'linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%)', padding: '2rem' }}>
               <SettingsPage />
             </main>
           </div>

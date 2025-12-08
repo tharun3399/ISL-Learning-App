@@ -40,7 +40,7 @@ export default function RegisterPage() {
 
   try {
     console.log('Registering user with', formData);
-    const res = await axios.post('http://localhost:5000/register', formData);
+    const res = await axios.post('http://localhost:5000/api/auth/register', formData);
     console.log('Registration successful:', res.data);
     // optionally show success message before navigate
     navigate('/dashboard');
@@ -77,7 +77,7 @@ export default function RegisterPage() {
       // First, try to login if user already exists
       try {
         const loginRes = await axios.post(
-          'http://localhost:5000/login',
+          'http://localhost:5000/api/auth/login',
           {
             email: googleData.email,
             google_id: googleData.googleId,

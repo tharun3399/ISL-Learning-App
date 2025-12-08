@@ -10,8 +10,11 @@ import LoginPage from './components/Login/LoginPage'
 import RegisterPage from './components/Register/RegisterPage'
 import GoogleSignupComplete from './components/Register/GoogleSignupComplete'
 import VideoPage from './components/Video/VideoPage'
-import DashboardPage from './components/Dashboard/DashboardPage'
+import Dashboard from './components/Dashboard/Dashboard'
+import LearningPath from './components/Dashboard/LearningPath/LearningPath'
+import ModuleDetail from './components/Dashboard/LearningPath/ModuleDetail'
 import Test from './components/test/test'
+import Account from './components/Dashboard/account/Account'
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || 'YOUR_GOOGLE_CLIENT_ID_HERE'
 
@@ -31,7 +34,11 @@ export default function App() {
 
               {/* protected group */}
               <Route element={<RequireAuth />}>
-                <Route path="/dashboard/*" element={<DashboardPage />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/learning-path" element={<LearningPath />} />
+                <Route path="/module/:moduleId" element={<ModuleDetail />} />
+                <Route path="/video" element={<VideoPage />} />
+                <Route path="/account" element={<Account />} />
               </Route>
 
               {/* redirect any /login/* to /login (handles /login/dashboard) */}

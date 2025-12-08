@@ -1,215 +1,244 @@
-/* Dashboard.css - Main Layout Styles */
+/* Dashboard.css - Main Layout */
 
-:root {
-  --bg-dark: #0a0e27;
-  --bg-dark-secondary: #1a1f3a;
-  --card-bg: rgba(15, 20, 40, 0.8);
-  --text-primary: #ffffff;
-  --text-secondary: rgba(200, 220, 255, 0.8);
-  --accent: #00ff7f;
-  --accent-cyan: #00d9ff;
-  --accent-pink: #ff006e;
-  --border-color: rgba(0, 217, 255, 0.15);
-  --transition: all 0.3s ease;
-}
-
-/*
- * Dashboard Container
- * 
- * Main flex container for three-column layout:
- * - Left: Navbar (fixed or collapsible)
- * - Middle: Lesson list (flexible)
- * - Right: Progress card
- */
-.dashboard-container {
+.dashboard {
   display: flex;
-  min-height: 100vh;
-  background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-dark-secondary) 100%);
-  color: var(--text-primary);
+  height: 100vh;
+  background: #f5f7fa;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  position: relative;
+  transition: all 0.3s ease;
 }
 
-.dashboard-container::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 50%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(255, 0, 110, 0.08) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/**
- * Main Content Area
- * 
- * Flex layout for lesson list and progress card
- * Responsive: 2-column on desktop, stacked on mobile
- */
-/* Dashboard Main - horizontal layout, no extra gap */
-.dashboard-main {
-  display: flex;
+.dashboard-content {
   flex: 1;
-  gap: 1rem;
-  align-items: stretch;
-  min-height: 0;
-  overflow: hidden;
-  position: relative;
-  z-index: 1;
-  padding: 1rem;
-  min-width: 0;
-}
-
-/**
- * Left Sidebar (Navbar)
- * Already styled in Navbar.css
- */
-
-/**
- * Middle Column - Lesson List
- * 
- * Takes ~60% width on desktop
- * Scrollable for long lesson lists
- */
-/* Lesson List Container - resizable, no scrollbar */
-.lesson-list-container {
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 1.5rem;
-  border-right: 1px solid rgba(0, 217, 255, 0.08);
-  min-width: 200px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 217, 255, 0.3) transparent;
-  flex: 1;
-  background: linear-gradient(to bottom, 
-    rgba(10, 14, 39, 0.4) 0%,
-    rgba(26, 31, 58, 0.2) 100%
-  );
-  border-radius: 12px;
-  min-width: 0;
-}
-
-.lesson-list-container::-webkit-scrollbar {
-  width: 6px;
-}
-
-.lesson-list-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.lesson-list-container::-webkit-scrollbar-thumb {
-  background: rgba(0, 217, 255, 0.3);
-  border-radius: 3px;
-}
-
-.lesson-list-container::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 217, 255, 0.5);
-}
-
-/* Resize Handle - transparent, no highlight */
-.dashboard-resize-handle {
-  width: 8px;
-  cursor: col-resize;
-  background: transparent;
-  border-radius: 6px;
-  position: relative;
-  z-index: 2;
-  margin: 0;
-  transition: background 0.3s ease;
-}
-
-.dashboard-resize-handle:hover, .dashboard-resize-handle:focus {
-  background: rgba(0, 217, 255, 0.2);
-}
-
-/* Progress Card Sidebar - resizable, scrollable */
-.dashboard-aside {
-  overflow-y: auto;
-  padding: 1.5rem;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 217, 255, 0.05) 100%);
-  min-width: 250px;
-  max-width: 350px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 217, 255, 0.3) transparent;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
   gap: 1.5rem;
-  border-left: 1px solid rgba(0, 217, 255, 0.1);
+  flex-wrap: wrap;
 }
 
-.dashboard-aside::-webkit-scrollbar {
-  width: 6px;
+.dashboard-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
 }
 
-.dashboard-aside::-webkit-scrollbar-track {
+.dashboard-header-actions {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  flex: 1;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  padding: 0.75rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  width: 250px;
+  font-size: 14px;
+  background: #f9fafb;
+  transition: all 0.2s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Screen Selector */
+.screen-selector {
+  display: flex;
+  gap: 0.5rem;
+  background: #f9fafb;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.screen-btn {
+  padding: 0.5rem 1rem;
+  border: none;
   background: transparent;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
-.dashboard-aside::-webkit-scrollbar-thumb {
-  background: rgba(0, 217, 255, 0.3);
-  border-radius: 3px;
+.screen-btn:hover {
+  background: #e5e7eb;
+  color: #374151;
 }
 
-.dashboard-aside::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 217, 255, 0.5);
+.screen-btn.active {
+  background: #3b82f6;
+  color: white;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
 }
 
-/**
- * Responsive Layout
- * 
- * Mobile: Stack vertically, collapse navbar to top
- */
-@media (max-width: 1024px) {
-  .dashboard-main {
+.notification-icon {
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.notification-icon:hover {
+  transform: scale(1.1);
+}
+
+/* RESPONSIVE DESIGN */
+
+/* LAPTOP (1024px and above) */
+@media (min-width: 1024px) {
+  .dashboard-laptop {
+    flex-direction: row;
+  }
+
+  .dashboard-header {
+    padding: 2rem;
+    flex-direction: row;
+  }
+
+  .dashboard-title {
+    font-size: 28px;
+  }
+
+  .dashboard-header-actions {
+    gap: 1.5rem;
+    flex-wrap: nowrap;
+  }
+
+  .search-input {
+    width: 250px;
+  }
+
+  .screen-btn {
+    padding: 0.5rem 1rem;
+    font-size: 13px;
+  }
+}
+
+/* TABLET (768px to 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .dashboard-tablet {
     flex-direction: column;
   }
 
-  .lesson-list-container {
+  .dashboard {
+    flex-direction: column;
+  }
+
+  .dashboard-header {
+    padding: 1.5rem;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .dashboard-title {
+    font-size: 24px;
+  }
+
+  .dashboard-header-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+
+  .screen-selector {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .screen-btn {
     flex: 1;
-    padding: 1.5rem;
-    border-right: none;
-    border-bottom: 1px solid var(--border-color);
-  }
-
-  .dashboard-aside {
-    flex: 0 0 auto;
-    border-top: 1px solid var(--border-color);
-    border-left: none;
-    border-right: none;
-    padding: 1.5rem;
-    max-width: none;
+    padding: 0.6rem 0.8rem;
+    font-size: 12px;
   }
 }
 
-@media (max-width: 768px) {
-  .dashboard-container {
+/* PHONE (below 768px) */
+@media (max-width: 767px) {
+  .dashboard-phone {
     flex-direction: column;
   }
 
-  .dashboard-main {
+  .dashboard {
     flex-direction: column;
+    height: auto;
+    min-height: 100vh;
   }
 
-  .lesson-list-container {
+  .dashboard-header {
     padding: 1rem;
-    border-right: none;
-    border-bottom: 1px solid var(--border-color);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    border-bottom: 1px solid #e5e7eb;
   }
 
-  .dashboard-aside {
-    border-top: 1px solid var(--border-color);
-    border-left: none;
-    border-right: none;
-    padding: 1rem;
-    max-width: none;
+  .dashboard-title {
+    font-size: 20px;
+  }
+
+  .dashboard-header-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 14px;
+  }
+
+  .screen-selector {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .screen-btn {
+    flex: 1;
+    padding: 0.6rem 0.5rem;
+    font-size: 11px;
+  }
+
+  .notification-icon {
+    font-size: 18px;
   }
 }
 
-/**
- * Custom Scrollbar Styling
- * Thin, subtle scrollbars that match the theme
- */
+/* Force screen modes when manually selected */
+.dashboard-phone {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.dashboard-tablet {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.dashboard-laptop {
+  width: 100%;
+}

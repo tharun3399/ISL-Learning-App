@@ -1,84 +1,101 @@
-import React, { useState } from 'react'
-import { FiChevronDown, FiChevronUp } from 'react-icons/fi'
-import LessonList from './LessonList'
-import ProgressCard from './ProgressCard'
-import { mockLessons } from './mockData'
+import React, { useState, useContext, useEffect } from 'react'
+import { AuthContext } from '../../context/AuthContext'
+import Sidebar from './Sidebar/Sidebar'
+import DashboardContent from './DashboardContent/DashboardContent'
 import './Dashboard.css'
 
 export default function Dashboard() {
-  const [lessons, setLessons] = useState(mockLessons)
-  const [resizeWidth, setResizeWidth] = useState(60)
-  const [isResizing, setIsResizing] = useState(false)
+  const { authState } = useContext(AuthContext)
+  const user = authState?.user || {}
+  const [screenSize, setScreenSize] = useState('laptop')
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  const [manualScreenMode, setManualScreenMode] = useState(null)
 
-  const completedCount = lessons.filter(l => l.completed).length
-  const completionPercent = Math.round((completedCount / lessons.length) * 100)
-
-  // Handle lesson toggle
-  const handleToggleLesson = (id) => {
-    setLessons(prev =>
-      prev.map(lesson =>
-        lesson.id === id
-          ? { ...lesson, completed: !lesson.completed }
-          : lesson
-      )
-    )
+  const stats = {
+    dailyStreak: 12,
+    totalXP: 2450,
+    currentGoal: 30,
+    rank: 3
   }
 
-  // Mouse events for resize
-  const handleMouseDown = () => setIsResizing(true)
-  const handleMouseUp = () => setIsResizing(false)
-  const handleMouseMove = (e) => {
-    if (!isResizing) return
-    const container = document.querySelector('.dashboard-main')
-    if (!container) return
-
-    const containerRect = container.getBoundingClientRect()
-    const newWidth = ((e.clientX - containerRect.left) / containerRect.width) * 100
-    if (newWidth > 30 && newWidth < 80) {
-      setResizeWidth(newWidth)
-    }
-  }
-
-  React.useEffect(() => {
-    if (isResizing) {
-      window.addEventListener('mousemove', handleMouseMove)
-      window.addEventListener('mouseup', handleMouseUp)
-      return () => {
-        window.removeEventListener('mousemove', handleMouseMove)
-        window.removeEventListener('mouseup', handleMouseUp)
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth)
+      if (!manualScreenMode) {
+        if (window.innerWidth < 768) {
+          setScreenSize('phone')
+        } else if (window.innerWidth < 1024) {
+          setScreenSize('tablet')
+        } else {
+          setScreenSize('laptop')
+        }
       }
     }
-  }, [isResizing])
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [manualScreenMode])
+
+  // Set initial screen size
+  useEffect(() => {
+    if (!manualScreenMode) {
+      if (window.innerWidth < 768) {
+        setScreenSize('phone')
+      } else if (window.innerWidth < 1024) {
+        setScreenSize('tablet')
+      } else {
+        setScreenSize('laptop')
+      }
+    }
+  }, [])
+
+  const handleScreenModeChange = (mode) => {
+    setManualScreenMode(mode)
+    setScreenSize(mode)
+  }
 
   return (
-    <div className="dashboard-container">
-      <main className="dashboard-main">
-        {/* Lesson List Section */}
-        <div
-          className="lesson-list-container"
-          style={{ flex: `0 0 ${resizeWidth}%` }}
-        >
-          <LessonList
-            lessons={lessons}
-            onToggleLesson={handleToggleLesson}
-          />
+    <div className={`dashboard dashboard-${screenSize}`}>
+      <Sidebar />
+      <div className="dashboard-content">
+        <div className="dashboard-header">
+          <h1 className="dashboard-title">Dashboard</h1>
+          <div className="dashboard-header-actions">
+            <input type="text" placeholder="Search lessons..." className="search-input" />
+            <div className="screen-selector">
+              <button
+                className={`screen-btn ${screenSize === 'phone' ? 'active' : ''}`}
+                onClick={() => handleScreenModeChange('phone')}
+                title="Phone View"
+              >
+                📱 Phone
+              </button>
+              <button
+                className={`screen-btn ${screenSize === 'tablet' ? 'active' : ''}`}
+                onClick={() => handleScreenModeChange('tablet')}
+                title="Tablet View"
+              >
+                📱 Tablet
+              </button>
+              <button
+                className={`screen-btn ${screenSize === 'laptop' ? 'active' : ''}`}
+                onClick={() => handleScreenModeChange('laptop')}
+                title="Laptop View"
+              >
+                💻 Laptop
+              </button>
+            </div>
+            <div className="notification-icon">🔔</div>
+          </div>
         </div>
 
-        {/* Resize Handle */}
-        <div
-          className="dashboard-resize-handle"
-          onMouseDown={handleMouseDown}
+        <DashboardContent 
+          user={user} 
+          stats={stats} 
+          screenSize={screenSize}
         />
-
-        {/* Progress Card Section */}
-        <aside className="dashboard-aside">
-          <ProgressCard
-            completionPercent={completionPercent}
-            completedLessons={completedCount}
-            totalLessons={lessons.length}
-          />
-        </aside>
-      </main>
+      </div>
     </div>
   )
 }

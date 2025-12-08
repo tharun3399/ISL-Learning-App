@@ -1,16 +1,9 @@
-const express=require("express");
-const App=express();
+// index.js
+console.log("INDEX: starting main server...");
 
-App.listen(3000, ()=>{
-    console.log("App is listening");
+try {
+  require('./server');
+} catch (err) {
+  console.error("INDEX: Failed to start server.js");
+  console.error(err);
 }
-)
-
-App.get("/", (req,res)=>{
-    res.status(200).send("App is Working");
-}
-)
-
-App.post("/",(req,res)=>{
-    res.status(200).send("POST Method working good")
-})

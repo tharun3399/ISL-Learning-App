@@ -39,7 +39,7 @@ export default function LoginPage() {
       // POST to your server's login route.
       // withCredentials:true is required if server sets httpOnly cookie
       const res = await axios.post(
-        'http://localhost:5000/login',
+        'http://localhost:5000/api/auth/login',
         { email, password },
         { withCredentials: true }
       )
@@ -79,7 +79,7 @@ export default function LoginPage() {
 
       // Send to backend login endpoint with Google data
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/login`,
+        `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/login`,
         {
           email: decoded.email,
           google_id: decoded.sub,

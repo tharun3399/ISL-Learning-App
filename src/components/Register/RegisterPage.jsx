@@ -95,12 +95,15 @@ export default function RegisterPage() {
         navigate('/dashboard', { replace: true })
       } catch (loginErr) {
         // User doesn't exist - go to completion form
+        console.log('Login error status:', loginErr.response?.status)
+        console.log('Login error data:', loginErr.response?.data)
         if (loginErr.response?.status === 401) {
           console.log('User does not exist, going to completion form')
           navigate('/register/complete', {
             state: { googleData }
           })
         } else {
+          console.error('Unexpected login error:', loginErr)
           throw loginErr
         }
       }

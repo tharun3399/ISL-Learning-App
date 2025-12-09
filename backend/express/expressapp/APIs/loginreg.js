@@ -119,7 +119,7 @@ router.post('/register', registerLimiter, async (req, res) => {
 
     // Build dynamic insert based on available columns
     let insertQ = `
-      INSERT INTO userinfo" (name, email, phone, password_hash`;
+      INSERT INTO "userinfo" (name, email, phone, password_hash`;
     let values = [name.trim(), email.toLowerCase(), phone || null, passwordHash];
     let paramIndex = 5;
 
@@ -153,7 +153,19 @@ router.post('/login', loginLimiter, async (req, res) => {
       if (!validateEmail(email)) return res.status(400).json({ message: 'Invalid email format' });
 
       try {
-        // Try to select with Google columns - they may not exist
+        // Ensure google columns exist first
+        try {
+          await db.query(`
+            ALTER TABLE IF EXISTS "userinfo"
+            ADD COLUMN IF NOT EXISTS google_id VARCHAR(255),
+            ADD COLUMN IF NOT EXISTS is_google_auth BOOLEAN DEFAULT false,
+            ADD COLUMN IF NOT EXISTS profile_picture VARCHAR(500);
+          `);
+        } catch (schemaErr) {
+          console.warn('Schema update warning:', schemaErr.message);
+        }
+
+        // Try to select with Google columns
         const q = `
           SELECT name, email, phone, 
                  COALESCE(google_id, NULL) as google_id,

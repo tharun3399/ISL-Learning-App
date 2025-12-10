@@ -11,6 +11,12 @@
   overflow: hidden;
 }
 
+@media (max-width: 480px) {
+  .register-container {
+    padding: 16px;
+  }
+}
+
 .register-container::before {
   content: '';
   position: absolute;
@@ -23,6 +29,15 @@
   pointer-events: none;
 }
 
+@media (max-width: 480px) {
+  .register-container::before {
+    width: 300px;
+    height: 300px;
+    top: -50px;
+    left: -50px;
+  }
+}
+
 .register-container::after {
   content: '';
   position: absolute;
@@ -33,6 +48,15 @@
   bottom: -100px;
   right: -100px;
   pointer-events: none;
+}
+
+@media (max-width: 480px) {
+  .register-container::after {
+    width: 300px;
+    height: 300px;
+    bottom: -50px;
+    right: -50px;
+  }
 }
 
 .register-box {
@@ -48,6 +72,19 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
+@media (max-width: 768px) {
+  .register-box {
+    padding: 30px;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-box {
+    padding: 24px;
+  }
+}
+
 .register-title {
   margin: 0 0 8px;
   font-size: 32px;
@@ -58,16 +95,41 @@
   background-clip: text;
 }
 
+@media (max-width: 768px) {
+  .register-title {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-title {
+    font-size: 24px;
+  }
+}
+
 .register-subtitle {
   margin: 0 0 32px;
   color: rgba(200, 220, 255, 0.8);
   font-size: 15px;
 }
 
+@media (max-width: 480px) {
+  .register-subtitle {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+}
+
 .register-form {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+@media (max-width: 480px) {
+  .register-form {
+    gap: 12px;
+  }
 }
 
 .form-group {

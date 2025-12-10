@@ -1,6 +1,11 @@
 import React, { useState, useContext } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import axios from 'axios'
+// src/axiosConfig.js
+import axios from 'axios';
+
+//axios.defaults.baseURL = process.env.VITE_API_URL || 'http://localhost:5000';
+axios.defaults.withCredentials = true; // << important: send cookies automatically
+
 import './LoginPage.css'
 import { AuthContext } from '../../context/AuthContext' // adjust path if needed
 import { GoogleLogin } from '@react-oauth/google'

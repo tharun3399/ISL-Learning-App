@@ -195,7 +195,7 @@ router.post('/login', loginLimiter, async (req, res) => {
           maxAge: 60 * 60 * 1000,
         });
 
-        return res.json({ message: 'Logged in successfully with Google', user: payload });
+        return res.json({ message: 'Logged in successfully with Google', token,user: payload });
       } catch (dbErr) {
         console.error('Google login DB error:', dbErr.message);
         // If column doesn't exist, treat as user not found
@@ -228,7 +228,7 @@ router.post('/login', loginLimiter, async (req, res) => {
       maxAge: 60 * 60 * 1000,
     });
 
-    return res.json({ message: 'Logged in successfully', user: payload });
+    return res.json({ message: 'Logged in successfully', token, user: payload });
   } catch (err) {
     console.error('Login error:', err);
     return res.status(500).json({ message: 'Server error during login' });

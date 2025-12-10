@@ -12,12 +12,37 @@
   overflow: hidden;
 }
 
+@media (max-width: 768px) {
+  .page-bg {
+    padding: 20px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-bg {
+    padding: 16px 12px;
+  }
+}
+
 .container {
   width: 100%;
   max-width: 900px;
   display: flex;
   gap: 40px;
   align-items: center;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    gap: 20px;
+  }
 }
 
 .card {
@@ -27,14 +52,33 @@
   width: 100%;
 }
 
+@media (max-width: 768px) {
+  .card {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
 .card-left {
   flex: 1;
   min-width: 300px;
 }
 
+@media (max-width: 768px) {
+  .card-left {
+    min-width: 100%;
+  }
+}
+
 .card-right {
   flex: 1;
   display: none;
+}
+
+@media (min-width: 769px) {
+  .card-right {
+    display: block;
+  }
 }
 
 .brand {
@@ -48,6 +92,13 @@
   margin-bottom: 30px;
 }
 
+@media (max-width: 480px) {
+  .brand {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+}
+
 .title {
   margin: 0 0 12px;
   font-size: 36px;
@@ -59,16 +110,41 @@
   color: transparent;
 }
 
+@media (max-width: 768px) {
+  .title {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 24px;
+  }
+}
+
 .subtitle {
   margin: 0 0 28px;
   color: rgba(200, 220, 255, 0.8);
   font-size: 16px;
 }
 
+@media (max-width: 480px) {
+  .subtitle {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+}
+
 .form {
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+@media (max-width: 480px) {
+  .form {
+    gap: 16px;
+  }
 }
 
 .label {
